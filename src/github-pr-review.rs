@@ -104,7 +104,7 @@ async fn handler(
     };
 
     let chat_id = format!("PR#{pull_number}");
-    let system = &format!("You are a senior software developer. You will review a source code file and its patch related to the subject of \"{}\".", title);
+    let system = &format!("您是一个资深的软件开发人员，尤其擅长java开发。您将审查与主题 \"{}\"相关的源代码及其补丁。", title);
     let mut openai = OpenAIFlows::new();
     openai.set_retry_times(3);
 
@@ -188,7 +188,7 @@ async fn handler(
                     restart: true,
                     system_prompt: Some(system),
                 };
-                let question = "Review the following source code and look for potential problems.If there is room for optimization in the code, please provide suggestions. The code might be truncated. So, do NOT comment on the completeness of the source code.\n\n".to_string() + t_file_as_text;
+                let question = "请审查以下源代码，并查找潜在问题。如果代码中有优化的空间，请提供建议。代码可能已经被截断，所以请不要评论源代码的完整性。\n\n".to_string() + t_file_as_text;
                 match openai.chat_completion(&chat_id, &question, &co).await {
                     Ok(r) => {
                         resp.push_str(&r.choice);
@@ -208,7 +208,7 @@ async fn handler(
                 };
                 let patch_as_text = f.patch.unwrap_or("".to_string());
                 let t_patch_as_text = truncate(&patch_as_text, CHAR_SOFT_LIMIT);
-                let question = "The following is a patch. Please summarize key changes.\n\n".to_string() + t_patch_as_text;
+                let question = "请总结下面这个补丁的更改内容.\n\n".to_string() + t_patch_as_text;
                 match openai.chat_completion(&chat_id, &question, &co).await {
                     Ok(r) => {
                         resp.push_str(&r.choice);
