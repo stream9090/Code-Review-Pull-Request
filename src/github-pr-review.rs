@@ -188,7 +188,7 @@ async fn handler(
                     restart: true,
                     system_prompt: Some(system),
                 };
-                let question = "请审查以下源代码，并查找潜在问题。如果代码中有优化的空间，请提供建议。如果代码存在逻辑问题，请指出并给出修改建议。代码可能已经被截断，所以请不要评论源代码的完整性。\n\n".to_string() + t_file_as_text;
+                let question = "请审查以下源代码，并查找潜在问题。如果代码中有优化的空间，请提供建议。如果存在业务逻辑问题，请指出并给出修改建议。代码可能已经被截断，所以请不要评论源代码的完整性。\n\n".to_string() + t_file_as_text;
                 match openai.chat_completion(&chat_id, &question, &co).await {
                     Ok(r) => {
                         resp.push_str(&r.choice);
